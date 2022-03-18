@@ -2,6 +2,7 @@
 pragma solidity ^0.8.12;
 
 import "./FungusFactory.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 interface FeedFactoryInterface {
     function getFeed(uint _id) external view returns (
@@ -39,7 +40,7 @@ contract FungusFeeding is FungusFactory {
         uint newDna = (myFungus.dna + targetDna) / 2;
 
         if (keccak256(bytes(species)) == keccak256("feed")) {
-            newDna = newDna - newDna % 100 + 99;
+            newDna = newDna - newDna % 100 + 1;
         }
 
         _createFungus("Noname", newDna);

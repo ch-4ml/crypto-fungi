@@ -10,7 +10,7 @@ contract FungusFactory is Ownable {
     // RED: 3, GREEN: 3, BLUE: 3, ALPHA: 3, Species: 2
     uint dnaDigits = 14;
     uint dnaModulus = 10 ** dnaDigits;
-    uint cooldownTime = 10 minutes;
+    uint cooldownTime = 1 minutes;
 
     struct Fungus {
         string name;
@@ -24,7 +24,7 @@ contract FungusFactory is Ownable {
     mapping (address => uint) public ownerFungusCount;
 
     function _createFungus(string memory name, uint dna) internal {
-        fungi.push(Fungus(name, dna, uint32(block.timestamp)));
+        fungi.push(Fungus(name, dna, uint32(block.timestamp + cooldownTime)));
         uint id = fungi.length - 1;
         fungusToOwner[id] = msg.sender;
         ownerFungusCount[msg.sender]++;
@@ -33,11 +33,13 @@ contract FungusFactory is Ownable {
 
     function _generateRandomDna(string calldata _str) private view returns (uint) {
         uint rand = uint(keccak256(bytes(_str)));
-        return rand % dnaModulus;
+        uint dna = rand % dnaModulus;
+        dna = dna - dna % 100;
+        return dna;
     }
 
     function createRandomFungus(string calldata name) public {
-        require(ownerFungusCount[msg.sender] == 0);
+        require(ownerFungusCount[msg.sender] == 0, "a fungus already exists");
         uint randDna = _generateRandomDna(name);
         _createFungus(name, randDna);
     }
