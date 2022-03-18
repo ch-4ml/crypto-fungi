@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="title"><i class="fa-solid fa-mushroom"></i>크립토 곰팡이<i class="fa-solid fa-mushroom"></i></div>
+    <div id="fungus1" class="wrapper">
+      <object id="fungusobject" type="image/svg+xml" data="/img/fungus.svg"></object>
+    </div>
+    <object id="mushroomobject" type="image/svg+xml" data="/img/mushroom.svg"></object>
+    <div class="container">
+      <div class="fungi" id="fungi">
+        <div class="fungus"></div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+      integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/scripts/web3/dist/web3.min.js"></script>
+    <script src="/js/cryptoFungiABI.js"></script>
+    <script>
+      let web3, cryptoFungi, account;
+
+      function getFungusDetail(id) {
+        return cryptoFungi.methods.fungi(id).call();
+      }
+
+      function fungusToOwner(id) {
+        return cryptoFungi.methods.fungusToOwner(id).call();
+      }
+
+      function getFungiByOwner(owner) {
+        return cryptoFungi.methods.getFungiByOwner(owner).call();
+      }
+
+      function displayFungi(ids) {
+        console.log('called!');
+        console.log(ids);
+        $('#fungi').empty();
+        for (id of ids) {
+          getFungusDetail(id).then(function (fungus) {
+            // 이미지 만들기
+            $('#fungi').append(`
+            <div class="fungus">
+              <div class="image"></div>
+              <div class="name">${fungus.name}</div>
+              <div class="dna">${fungus.dna}</div>
+              <div class="ready">${fungus.readyTime}</div>
+            </div>`);
+          });
+        }
+      }
+
+      function strToColorHex(str) {
+        return (parseInt(str) % 255).toString(16);
+      }
+
+      function dnaToColorHex(dna) {
+        const red = strToColorHex(dna.slice(0, 3));
+        const green = strToColorHex(dna.slice(3, 6));
+        const blue = strToColorHex(dna.slice(6, 9));
+        const opacity = strToColorHex(dna.slice(9, 12));
+        return `${red}${green}${blue}${opacity}`;
+      }
+
+      function setSVGColor(svgId, colorHex) {
+        const svg = document.getElementById(svgId);
+        svg.addEventListener('load', function () {
+          const svgDoc = svg.contentDocument;
+          const colors = svgDoc.getElementsByClassName('color');
+          for (color of colors) {
+            color.setAttribute('fill', `#${colorHex}`);
+          }
+        });
+      }
+
+      setSVGColor('fungusobject', dnaToColorHex('87637647688900'));
+      setSVGColor('mushroomobject', dnaToColorHex('64917328219901'));
+
+      function startApp() {
+        let cryptoFungiAddress = '0x42500bF3168986879557E7b316542c4D807B5abC';
+        cryptoFungi = new web3.eth.Contract(cryptoFungiABI, cryptoFungiAddress);
+
+        window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+          account = accounts[0];
+          getFungiByOwner(account).then(displayFungi);
+
+          window.ethereum.on('accountsChanged', function (accounts) {
+            account = accounts[0];
+            getFungiByOwner(account).then(displayFungi);
+          });
+        });
+      }
+
+      window.addEventListener('load', function () {
+        if (window.ethereum) {
+          web3 = new Web3(window.ethereum);
+          window.ethereum.request({ method: 'eth_requestAccounts' });
+        } else if (window.web3) {
+          web3 = window.web3;
+          console.log('Injected web3 detected.');
+        } else {
+          const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
+          web3 = new Web3(provider);
+          console.log('No web3 instance injected, using local web3.');
+        }
+
+        startApp();
+      });
+    </script>
+  </body>
+</html>
