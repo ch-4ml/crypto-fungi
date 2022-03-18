@@ -6,7 +6,8 @@ import "./FungusFactory.sol";
 interface FeedFactoryInterface {
     function getFeed(uint _id) external view returns (
         string memory name,
-        uint dna
+        uint dna,
+        uint price
     );
 }
 
@@ -33,21 +34,23 @@ contract FungusFeeding is FungusFactory {
 
     function feedAndMultiply(uint fungusId, uint targetDna, string memory species) internal onlyOwnerOf(fungusId) {
         Fungus memory myFungus = fungi[fungusId];
-        require(_isReady(myFungus));
+        require(_isReady(myFungus), "not ready");
         targetDna = targetDna % dnaModulus;
         uint newDna = (myFungus.dna + targetDna) / 2;
 
         if (keccak256(bytes(species)) == keccak256("feed")) {
-            newDna = newDna % 100 + 99;
+            newDna = newDna - newDna % 100 + 99;
         }
 
         _createFungus("Noname", newDna);
         _triggerCooldown(myFungus);
     }
 
-    function feed(uint fungusId, uint _feedId) public {
+    function feed(uint fungusId, uint feedId) public payable {
         uint feedDna;
-        (,feedDna) = feedContract.getFeed(_feedId);
+        uint feedPrice;
+        (,feedDna,feedPrice) = feedContract.getFeed(feedId);
+        require(msg.value == feedPrice, "be paid inappropriate expenses");
         feedAndMultiply(fungusId, feedDna, "feed");
     }
 }

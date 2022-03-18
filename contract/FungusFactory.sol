@@ -21,10 +21,10 @@ contract FungusFactory is Ownable {
     Fungus[] public fungi;
 
     mapping (uint => address) public fungusToOwner;
-    mapping (address => uint) ownerFungusCount;
+    mapping (address => uint) public ownerFungusCount;
 
     function _createFungus(string memory name, uint dna) internal {
-        fungi.push(Fungus(name, dna, uint32(block.timestamp + cooldownTime)));
+        fungi.push(Fungus(name, dna, uint32(block.timestamp)));
         uint id = fungi.length - 1;
         fungusToOwner[id] = msg.sender;
         ownerFungusCount[msg.sender]++;
@@ -42,14 +42,14 @@ contract FungusFactory is Ownable {
         _createFungus(name, randDna);
     }
 
-    function getFungiByOwner(address _owner) external view returns(uint[] memory) {
-        uint[] memory result = new uint[](ownerFungusCount[_owner]);
+    function getFungiByOwner(address owner) external view returns(uint[] memory) {
+        uint[] memory result = new uint[](ownerFungusCount[owner]);
 
         uint counter = 0;
         for (uint i = 0; i < fungi.length; i++) {
-            if (fungusToOwner[i] == _owner) {
+            if (fungusToOwner[i] == owner) {
                 result[counter] = i;
-                unchecked { counter++; }
+                counter++;
             }
         }
         return result;
