@@ -1,0 +1,234 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+hr {
+  margin: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.header > button {
+  width: max-content;
+  position: absolute;
+  right: 2rem;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 1px gray;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+p {
+  margin-top: 10px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* modal */
+
+.popup-wrap {
+  background-color: rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  padding: 15px;
+}
+
+.popup {
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: salmon;
+  box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, 0.3);
+}
+
+.popup-head {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.head-title {
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.popup-body {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.body-content {
+  width: 100%;
+  padding: 30px;
+}
+
+.body-contentbox {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.body-contentbox input {
+  width: 75%;
+  text-align: center;
+  padding: 0.25rem;
+  margin: 0 0 0.5rem 0.5rem;
+}
+
+.popup-foot {
+  width: 100%;
+  height: 50px;
+}
+
+.pop-btn {
+  display: inline-flex;
+  width: 50%;
+  height: 100%;
+  float: left;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.pop-btn.submit {
+  border-right: 1px solid white;
+}
+
+/* fungi */
+
+.fungi {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+.fungus {
+  position: relative;
+  margin: 1.7rem;
+  width: 20%;
+  border: 2px solid gray;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.fungus > button {
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid salmon;
+  box-shadow: 1px 1px 1px rosybrown;
+  cursor: pointer;
+}
+
+.fungus > button > i {
+  color: salmon;
+}
+
+.fungus hr {
+  margin: 1rem;
+}
+
+.fungus .name {
+  padding-bottom: 0.5rem;
+}
+
+.fungus .dna {
+  padding-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.fungus .ready {
+  font-size: 0.8rem;
+}
+
+.image {
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  transition: 0.3s ease;
+  backface-visibility: hidden;
+}
+
+.middle {
+  transition: 0.3s ease;
+  opacity: 0;
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.image:hover {
+  opacity: 0.3;
+}
+
+.image:hover .middle {
+  opacity: 1 !important;
+}
+
+.image .button-wrap {
+  width: 72%;
+}
+
+.image .button-wrap button {
+  background-color: red;
+  color: white;
+  margin: 0.5rem 0 0.5rem 0;
+  padding: 0.5rem;
+  width: 100%;
+  border: 2px solid salmon;
+  cursor: pointer;
+}
+
+.image .button-wrap button:hover {
+  border: 2px solid red;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: salmon;
+}

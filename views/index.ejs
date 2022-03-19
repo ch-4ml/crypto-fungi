@@ -4,35 +4,162 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div class="title"><i class="fa-solid fa-mushroom"></i>크립토 곰팡이<i class="fa-solid fa-mushroom"></i></div>
-    <div id="fungus1" class="wrapper">
-      <object id="fungusobject" type="image/svg+xml" data="/img/fungus.svg"></object>
-    </div>
-    <object id="mushroomobject" type="image/svg+xml" data="/img/mushroom.svg"></object>
-    <div class="container">
-      <div class="fungi" id="fungi">
-        <div class="fungus"></div>
-      </div>
-    </div>
+    <title>Crypto Fungi</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="https://kit.fontawesome.com/1584e6b51a.js" crossorigin="anonymous"></script>
     <script
-      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
-    <script
-      defer
-      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
-      integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
-      crossorigin="anonymous"
-    ></script>
-
     <script src="/scripts/web3/dist/web3.min.js"></script>
     <script src="/js/cryptoFungiABI.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">Crypto Fungi</div>
+      <button class="modal-open" id="btnSetFeedFactoryContractAddress">먹이 컨트랙트 주소 변경하기</button>
+    </div>
+    <hr />
+
+    <div id="alert" class="alert"></div>
+    <!-- <object id="mushroomobject" type="image/svg+xml" data="/img/mushroom.svg"></object> -->
+
+    <div class="container">
+      <div class="fungi" id="fungi">
+        <div class="fungus">
+          <button>균 생성하기 <i id="btnCreate" class="fas fa-plus-circle"></i></button>
+        </div>
+
+        <div class="fungus">
+          <div class="image">
+            <object id="fungusobject" type="image/svg+xml" data="/img/fungus.svg"></object>
+            <div class="middle">
+              <div class="button-wrap">
+                <button class="modal-open" id="btnFeed" data-fungusid="0">먹이 주기</button>
+                <button class="modal-open" id="btnApprove" data-fungusid="0">전송 권한 위임</button>
+                <button class="modal-open" id="btnTransferFrom" data-fungusid="0">전송하기</button>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="name">곰팡이</div>
+          <div class="dna">DNA: 87637647688900</div>
+          <div class="ready">Ready at 00:00:00</div>
+        </div>
+
+        <div class="fungus">
+          <div class="image">
+            <object id="fungusobject" type="image/svg+xml" data="/img/fungus.svg"></object>
+            <div class="middle">
+              <div class="button-wrap">
+                <button>먹이 주기</button>
+                <button>전송 권한 위임</button>
+                <button>전송하기</button>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="name">곰팡이</div>
+          <div class="dna">DNA: 87637647688900</div>
+          <div class="ready">Ready at 00:00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 먹이 컨트랙트 주소 변경하기 팝업 -->
+    <div class="popup-wrap" id="modalSetFeedFactoryContractAddress">
+      <div class="popup">
+        <div class="popup-head">
+          <span class="head-title">먹이 컨트랙트 주소 변경하기</span>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-contentbox">주소<input id="txtContractAddress" type="text" placeholder="0x......" /></div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn submit">확인</span>
+          <span class="pop-btn close">창 닫기</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 균 생성하기 팝업 -->
+    <div class="popup-wrap" id="modalCreateRandomFungus">
+      <div class="popup">
+        <div class="popup-head">
+          <span class="head-title">균 생성하기</span>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-contentbox">이름<input id="txtName" type="text" placeholder="곰팡이" /></div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn submit" id="btnSubmit">확인</span>
+          <span class="pop-btn close" id="btnClose">창 닫기</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 먹이 주기 팝업 -->
+    <div class="popup-wrap" id="modalFeed">
+      <div class="popup">
+        <div class="popup-head">
+          <span class="head-title">먹이 주기</span>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-contentbox">먹이 ID<input id="txtFeedId" type="text" placeholder="0" /></div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn submit" id="btnSubmit">확인</span>
+          <span class="pop-btn close" id="btnClose">창 닫기</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전송 권한 위임 팝업 -->
+    <div class="popup-wrap" id="modalApprove">
+      <div class="popup">
+        <div class="popup-head">
+          <span class="head-title">전송 권한 위임</span>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-contentbox">주소<input id="txtToAddress" type="text" placeholder="0x......" /></div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn submit" id="btnSubmit">확인</span>
+          <span class="pop-btn close" id="btnClose">창 닫기</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전송 -->
+    <div class="popup-wrap" id="modalTransferFrom">
+      <div class="popup">
+        <div class="popup-head">
+          <span class="head-title">토큰 전송</span>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-contentbox">보낼 주소<input id="txtFromAddress" type="text" placeholder="0x......" /></div>
+            <div class="body-contentbox">받을 주소<input id="txtToAddress" type="text" placeholder="0x......" /></div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn submit" id="btnSubmit">확인</span>
+          <span class="pop-btn close" id="btnClose">창 닫기</span>
+        </div>
+      </div>
+    </div>
+
     <script>
-      let web3, cryptoFungi, account;
+      let web3, cryptoFungi, account, currentModalId, currentFungusId;
 
       function getFungusDetail(id) {
         return cryptoFungi.methods.fungi(id).call();
@@ -47,21 +174,125 @@
       }
 
       function displayFungi(ids) {
-        console.log('called!');
-        console.log(ids);
         $('#fungi').empty();
-        for (id of ids) {
-          getFungusDetail(id).then(function (fungus) {
-            // 이미지 만들기
-            $('#fungi').append(`
+        $('#alert').empty();
+        if (ids.length < 1) {
+          $('#fungi').append(`
             <div class="fungus">
-              <div class="image"></div>
-              <div class="name">${fungus.name}</div>
-              <div class="dna">${fungus.dna}</div>
-              <div class="ready">${fungus.readyTime}</div>
+              <button class="modal-open" id="btnCreateRandomFungus">균 생성하기 <i class="fas fa-plus-circle"></i></button>
             </div>`);
+          $(`.modal-open`).click(function () {
+            const buttonId = $(this).attr('id');
+            currentModalId = buttonId.replace('btn', 'modal');
+            console.log(currentModalId);
+            $(`#${currentModalId}`).css('display', 'flex').hide().fadeIn();
           });
+        } else {
+          for (const id of ids) {
+            getFungusDetail(id).then(function (fungus) {
+              const date = new Date(fungus.readyTime * 1000);
+              const hours = date.getHours();
+              const minutes = `0${date.getMinutes()}`;
+              const seconds = `0${date.getSeconds()}`;
+              const formattedTime = `${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
+              const species = fungus.dna.substr(-2);
+              const img = species === '00' ? '/img/fungus.svg' : '/img/mushroom.svg';
+
+              $('#fungi').append(`
+                    <div class="fungus" id="fungus${id}">
+                      <div class="image">
+                        <object id="img${id}" type="image/svg+xml" data="${img}"></object>
+                        <div class="middle">
+                          <div class="button-wrap">
+                            <button class="modal-open" id="btnFeed" data-fungusid="${id}">먹이 주기</button>
+                            <button class="modal-open" id="btnApprove" data-fungusid="${id}">전송 권한 위임</button>
+                            <button class="modal-open" id="btnTransferFrom" data-fungusid="${id}">전송하기</button>
+                          </div>
+                        </div>
+                      </div>
+                      <hr />
+                      <div class="name">${fungus.name}</div>
+                      <div class="dna">DNA: ${fungus.dna}</div>
+                      <div class="ready">Ready at ${formattedTime}</div>
+                    </div>`);
+
+              setSVGColor(`img${id}`, dnaToColorHex(fungus.dna));
+              addEvents(`fungus${id}`);
+            });
+          }
         }
+      }
+
+      function setFeedFactoryContractAddress(address) {
+        $('#alert').text('먹이를 찾는 중...');
+        return cryptoFungi.methods
+          .setFeedFactoryContractAddress(address)
+          .send({ from: account })
+          .on('receipt', function (receipt) {
+            $('#alert').text('먹이를 찾았습니다!');
+          })
+          .on('error', function (error) {
+            $('#alert').text(error);
+          });
+      }
+
+      function createRandomFungus(name) {
+        $('#alert').text('새로운 균을 생성하는 중...');
+        return cryptoFungi.methods
+          .createRandomFungus(name)
+          .send({ from: account })
+          .on('receipt', function (receipt) {
+            $('#alert').text(`${name}을 생성했습니다!`);
+            getFungiByOwner(account).then(displayFungi);
+          })
+          .on('error', function (error) {
+            $('#alert').text(error);
+          });
+      }
+
+      function feed(fungusId, feedId) {
+        $('#alert').text('맛있게 식사 중...');
+        return cryptoFungi.methods
+          .feed(fungusId, feedId)
+          .send({ from: account, value: web3.utils.toWei('0.0001') })
+          .on('receipt', function (receipt) {
+            $('#alert').text('균이 식사를 마쳤습니다. 이제 증식합니다!');
+            getFungiByOwner(account).then(displayFungi);
+          })
+          .on('error', function (error) {
+            $('#alert').text(error);
+          });
+      }
+
+      function approve(to, fungusId) {
+        $('#alert').text('전송 권한을 부여하는 중...');
+        return cryptoFungi.methods
+          .approve(to, fungusId)
+          .send({
+            from: account
+          })
+          .on('receipt', function (receipt) {
+            $('#alert').text('지정한 주소로 전송 권한을 부여했습니다!');
+          })
+          .on('error', function (error) {
+            $('#alert').text(error);
+          });
+      }
+
+      function transferFrom(from, to, fungusId) {
+        $('#alert').text('소중한 균을 다른 주소로 전송하는 중...');
+        return cryptoFungi.methods
+          .transferFrom(from, to, fungusId)
+          .send({
+            from: account
+          })
+          .on('receipt', function (receipt) {
+            $('#alert').text('균을 전송했습니다!');
+            getFungiByOwner(account).then(displayFungi);
+          })
+          .on('error', function (error) {
+            $('#alert').text(error);
+          });
       }
 
       function strToColorHex(str) {
@@ -87,8 +318,7 @@
         });
       }
 
-      setSVGColor('fungusobject', dnaToColorHex('87637647688900'));
-      setSVGColor('mushroomobject', dnaToColorHex('64917328219901'));
+      // setSVGColor('mushroomobject', dnaToColorHex('64917328219901'));
 
       function startApp() {
         let cryptoFungiAddress = '0x42500bF3168986879557E7b316542c4D807B5abC';
@@ -119,6 +349,66 @@
         }
 
         startApp();
+      });
+
+      function addEvents(fungusId) {
+        $(`#${fungusId} .modal-open`).click(function () {
+          const buttonId = $(this).attr('id');
+          currentModalId = buttonId.replace('btn', 'modal');
+          currentFungusId = $(this).attr('data-fungusid');
+          $(`#${currentModalId}`).css('display', 'flex').hide().fadeIn();
+        });
+      }
+
+      $(function () {
+        $(`.submit`).click(function () {
+          modalClose();
+          let name, feedId, address, fromAddress, toAddress;
+          switch (currentModalId) {
+            case 'modalSetFeedFactoryContractAddress':
+              address = $(`#${currentModalId} #txtContractAddress`);
+              setFeedFactoryContractAddress(address.val());
+              address.val('');
+              break;
+
+            case 'modalCreateRandomFungus':
+              name = $(`#${currentModalId} #txtName`);
+              createRandomFungus(name.val());
+              name.val('');
+              break;
+
+            case 'modalFeed':
+              feedId = $(`#${currentModalId} #txtFeedId`);
+              feed(currentFungusId, feedId.val());
+              feedId.val('');
+              break;
+
+            case 'modalApprove':
+              toAddress = $(`#${currentModalId} #txtToAddress`);
+              approve(toAddress, currentFungusId.val());
+              toAddress.val();
+              break;
+
+            case 'modalTransferFrom':
+              fromAddress = $(`#${currentModalId} #txtFromAddress`);
+              toAddress = $(`#${currentModalId} #txtToAddress`);
+              transferFrom(fromAddress.val(), toAddress.val(), currentFungusId);
+              fromAddress.val('');
+              toAddress.val('');
+              break;
+
+            default:
+              break;
+          }
+        });
+
+        $(`.close`).click(function () {
+          modalClose();
+        });
+
+        function modalClose() {
+          $(`#${currentModalId}`).fadeOut();
+        }
       });
     </script>
   </body>
