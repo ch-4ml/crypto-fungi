@@ -23,7 +23,6 @@
     <hr />
 
     <div id="alert" class="alert"></div>
-    <!-- <object id="mushroomobject" type="image/svg+xml" data="/img/mushroom.svg"></object> -->
 
     <div class="container">
       <div class="fungi" id="fungi">
@@ -67,7 +66,7 @@
       </div>
     </div>
 
-    <!-- 먹이 컨트랙트 주소 변경하기 팝업 -->
+    <!-- 먹이 컨트랙트 주소 변경하기 팝업 모달 -->
     <div class="popup-wrap" id="modalSetFeedFactoryContractAddress">
       <div class="popup">
         <div class="popup-head">
@@ -85,7 +84,7 @@
       </div>
     </div>
 
-    <!-- 균 생성하기 팝업 -->
+    <!-- 균 생성하기 팝업 모달 -->
     <div class="popup-wrap" id="modalCreateRandomFungus">
       <div class="popup">
         <div class="popup-head">
@@ -103,7 +102,7 @@
       </div>
     </div>
 
-    <!-- 먹이 주기 팝업 -->
+    <!-- 먹이 주기 팝업 모달 -->
     <div class="popup-wrap" id="modalFeed">
       <div class="popup">
         <div class="popup-head">
@@ -121,7 +120,7 @@
       </div>
     </div>
 
-    <!-- 전송 권한 위임 팝업 -->
+    <!-- 전송 권한 위임 팝업 모달 -->
     <div class="popup-wrap" id="modalApprove">
       <div class="popup">
         <div class="popup-head">
@@ -139,7 +138,7 @@
       </div>
     </div>
 
-    <!-- 전송 -->
+    <!-- 전송 팝업 모달 -->
     <div class="popup-wrap" id="modalTransferFrom">
       <div class="popup">
         <div class="popup-head">
@@ -173,10 +172,12 @@
         return cryptoFungi.methods.getFungiByOwner(owner).call();
       }
 
+      // 현재 선택된 계정이 보유하고 있는 fungi를 그리는 함수
       function displayFungi(ids) {
         $('#fungi').empty();
         $('#alert').empty();
         if (ids.length < 1) {
+          // 보유한 fungus가 없는 경우 균 생성하기 버튼을 그림
           $('#fungi').append(`
             <div class="fungus">
               <button class="modal-open" id="btnCreateRandomFungus">균 생성하기 <i class="fas fa-plus-circle"></i></button>
@@ -307,6 +308,7 @@
         return `${red}${green}${blue}${opacity}`;
       }
 
+      // Fungus 그림의 색상을 변경하는 함수
       function setSVGColor(svgId, colorHex) {
         const svg = document.getElementById(svgId);
         svg.addEventListener('load', function () {
@@ -318,31 +320,53 @@
         });
       }
 
-      // setSVGColor('mushroomobject', dnaToColorHex('64917328219901'));
-
+      // 배포된 컨트랙트의 address와 ABI를 사용해서 컨트랙트 객체 생성
+      // 생성한 컨트랙트 객체에 접근해서 정의된 함수를 호출할 수 있음
       function startApp() {
         let cryptoFungiAddress = '0x42500bF3168986879557E7b316542c4D807B5abC';
         cryptoFungi = new web3.eth.Contract(cryptoFungiABI, cryptoFungiAddress);
 
+        // 현재 연결된 web3 provider(예제에서는 Metamask)에 있는 계정을 조회하고,
+        // 선택된 계정을 현재 계정에 해당하는 account 변수에 할당
         window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
           account = accounts[0];
           getFungiByOwner(account).then(displayFungi);
 
+          // 계정이 변경되는 것을 감지하고,
+          // 선택된 계정을 현재 계정에 해당하는 account 변수에 할당
           window.ethereum.on('accountsChanged', function (accounts) {
             account = accounts[0];
             getFungiByOwner(account).then(displayFungi);
           });
         });
+
+        // Transfer 이벤트 구독
+        cryptoFungi.events
+          // filter 옵션으로 현재 사용중인 계정의 주소가
+          // to 변수에 저장된 이벤트만 필터링
+          .Transfer({ filter: { to: account } })
+          .on('data', function (event) {
+            let data = event.returnValues;
+            console.log(data);
+            getFungiByOwner(account).then(displayFungi);
+            $('#alert').text('균을 받았습니다!');
+          })
+          .on('error', console.log(error));
       }
 
+      // 모든 리소스의 로딩이 완료되면 수행
+      // 브라우저에 설치된 Web3 provider를 app에 연결
       window.addEventListener('load', function () {
         if (window.ethereum) {
+          // latest
           web3 = new Web3(window.ethereum);
           window.ethereum.request({ method: 'eth_requestAccounts' });
         } else if (window.web3) {
+          // old
           web3 = window.web3;
           console.log('Injected web3 detected.');
         } else {
+          // not found
           const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
           web3 = new Web3(provider);
           console.log('No web3 instance injected, using local web3.');
@@ -351,6 +375,7 @@
         startApp();
       });
 
+      // 새로 생성된 fungus element에 event를 추가하는 함수
       function addEvents(fungusId) {
         $(`#${fungusId} .modal-open`).click(function () {
           const buttonId = $(this).attr('id');
@@ -360,6 +385,7 @@
         });
       }
 
+      // 모달 이벤트
       $(function () {
         $(`.submit`).click(function () {
           modalClose();
