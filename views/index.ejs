@@ -323,7 +323,7 @@
       // 배포된 컨트랙트의 address와 ABI를 사용해서 컨트랙트 객체 생성
       // 생성한 컨트랙트 객체에 접근해서 정의된 함수를 호출할 수 있음
       function startApp() {
-        let cryptoFungiAddress = '0x42500bF3168986879557E7b316542c4D807B5abC';
+        let cryptoFungiAddress = '0x213d7b38209C29e384643418D1Db3fCCFee99D02';
         cryptoFungi = new web3.eth.Contract(cryptoFungiABI, cryptoFungiAddress);
 
         // 현재 연결된 web3 provider(예제에서는 Metamask)에 있는 계정을 조회하고,
@@ -350,8 +350,7 @@
             console.log(data);
             getFungiByOwner(account).then(displayFungi);
             $('#alert').text('균을 받았습니다!');
-          })
-          .on('error', console.log(error));
+          });
       }
 
       // 모든 리소스의 로딩이 완료되면 수행
@@ -411,7 +410,7 @@
 
             case 'modalApprove':
               toAddress = $(`#${currentModalId} #txtToAddress`);
-              approve(toAddress, currentFungusId.val());
+              approve(toAddress.val(), currentFungusId);
               toAddress.val();
               break;
 
@@ -435,6 +434,13 @@
         function modalClose() {
           $(`#${currentModalId}`).fadeOut();
         }
+
+        $(`.modal-open`).click(function () {
+          const buttonId = $(this).attr('id');
+          currentModalId = buttonId.replace('btn', 'modal');
+          console.log(currentModalId);
+          $(`#${currentModalId}`).css('display', 'flex').hide().fadeIn();
+        });
       });
     </script>
   </body>
