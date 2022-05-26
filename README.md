@@ -8,7 +8,7 @@
 2. FungusOwnerShip.sol, FeedFactory를 실행한 네트워크에 배포하세요.
  
 3. 배포한 컨트랙트 주소를 복사해서 views/index.ejs 파일을 수정하세요.
-   * script 태그 내 startApp 함수 -> cryptoFungiAddress 있습니다.
+   * script 태그 내 startApp 함수 -> cryptoFungiAddress
    
 4. Web3 Provider를 설치하세요. (Metamask, Mist 등)
  
