@@ -42,24 +42,7 @@
             </div>
           </div>
           <hr />
-          <div class="name">곰팡이</div>
-          <div class="dna">DNA: 87637647688900</div>
-          <div class="ready">Ready at 00:00:00</div>
-        </div>
-
-        <div class="fungus">
-          <div class="image">
-            <object id="fungusobject" type="image/svg+xml" data="/img/fungus.svg"></object>
-            <div class="middle">
-              <div class="button-wrap">
-                <button>먹이 주기</button>
-                <button>전송 권한 위임</button>
-                <button>전송하기</button>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div class="name">곰팡이</div>
+          <div class="name">곰팡이(예시, 연결되지 않음)</div>
           <div class="dna">DNA: 87637647688900</div>
           <div class="ready">Ready at 00:00:00</div>
         </div>
@@ -74,7 +57,10 @@
         </div>
         <div class="popup-body">
           <div class="body-content">
-            <div class="body-contentbox">주소<input id="txtContractAddress" type="text" placeholder="0x......" /></div>
+            <div class="body-contentbox">
+              주소<input id="txtContractAddress" type="text" placeholder="배포한 먹이 컨트랙트의 주소 (ex. 0x...)" />
+            </div>
+            <div class="body-contentbox alert"></div>
           </div>
         </div>
         <div class="popup-foot">
@@ -92,7 +78,10 @@
         </div>
         <div class="popup-body">
           <div class="body-content">
-            <div class="body-contentbox">이름<input id="txtName" type="text" placeholder="곰팡이" /></div>
+            <div class="body-contentbox">
+              이름<input id="txtName" type="text" placeholder="생성할 곰팡이의 이름 (ex. 곰팡이)" />
+            </div>
+            <div class="body-contentbox alert"></div>
           </div>
         </div>
         <div class="popup-foot">
@@ -110,7 +99,10 @@
         </div>
         <div class="popup-body">
           <div class="body-content">
-            <div class="body-contentbox">먹이 ID<input id="txtFeedId" type="text" placeholder="0" /></div>
+            <div class="body-contentbox">
+              먹이 ID<input id="txtFeedId" type="text" placeholder="Feed의 Index (ex. 0)" />
+            </div>
+            <div class="body-contentbox alert"></div>
           </div>
         </div>
         <div class="popup-foot">
@@ -128,7 +120,10 @@
         </div>
         <div class="popup-body">
           <div class="body-content">
-            <div class="body-contentbox">주소<input id="txtToAddress" type="text" placeholder="0x......" /></div>
+            <div class="body-contentbox">
+              주소<input id="txtToAddress" type="text" placeholder="전송 권한을 위임할 계정 주소 (ex. 0x...)" />
+            </div>
+            <div class="body-contentbox alert"></div>
           </div>
         </div>
         <div class="popup-foot">
@@ -146,8 +141,13 @@
         </div>
         <div class="popup-body">
           <div class="body-content">
-            <div class="body-contentbox">보낼 주소<input id="txtFromAddress" type="text" placeholder="0x......" /></div>
-            <div class="body-contentbox">받을 주소<input id="txtToAddress" type="text" placeholder="0x......" /></div>
+            <div class="body-contentbox">
+              보낼 주소<input id="txtFromAddress" type="text" placeholder="토큰을 보내는 주소 (ex. 0x...)" />
+            </div>
+            <div class="body-contentbox">
+              받을 주소<input id="txtToAddress" type="text" placeholder="토큰을 받는 주소 (ex. 0x...)" />
+            </div>
+            <div class="body-contentbox alert"></div>
           </div>
         </div>
         <div class="popup-foot">
@@ -386,29 +386,44 @@
       // 모달 이벤트
       $(function () {
         $(`.submit`).click(function () {
-          modalClose();
           let name, feedId, address, fromAddress, toAddress;
           switch (currentModalId) {
             case 'modalSetFeedFactoryContractAddress':
               address = $(`#${currentModalId} #txtContractAddress`);
+              if (!address.val()) {
+                $(`#${currentModalId} .alert`).text('배포한 먹이 컨트랙트의 주소를 입력하세요.');
+                return;
+              }
               setFeedFactoryContractAddress(address.val());
               address.val('');
               break;
 
             case 'modalCreateRandomFungus':
               name = $(`#${currentModalId} #txtName`);
+              if (!name.val()) {
+                $(`#${currentModalId} .alert`).text('새 Fungus의 이름을 입력하세요.');
+                return;
+              }
               createRandomFungus(name.val());
               name.val('');
               break;
 
             case 'modalFeed':
               feedId = $(`#${currentModalId} #txtFeedId`);
+              if (!feedId.val()) {
+                $(`#${currentModalId} .alert`).text('먹이의 ID(index)를 입력하세요.');
+                return;
+              }
               feed(currentFungusId, feedId.val());
               feedId.val('');
               break;
 
             case 'modalApprove':
               toAddress = $(`#${currentModalId} #txtToAddress`);
+              if (!toAddress.val()) {
+                $(`#${currentModalId} .alert`).text('Fungus 전송 권한을 위임할 주소를 입력하세요.');
+                return;
+              }
               approve(toAddress.val(), currentFungusId);
               toAddress.val();
               break;
@@ -416,6 +431,14 @@
             case 'modalTransferFrom':
               fromAddress = $(`#${currentModalId} #txtFromAddress`);
               toAddress = $(`#${currentModalId} #txtToAddress`);
+              if (!fromAddress.val()) {
+                $(`#${currentModalId} .alert`).text('Fungus를 보내는 주소를 입력하세요.');
+                return;
+              }
+              if (!toAddress.val()) {
+                $(`#${currentModalId} .alert`).text('Fungus를 받을 주소를 입력하세요.');
+                return;
+              }
               transferFrom(fromAddress.val(), toAddress.val(), currentFungusId);
               fromAddress.val('');
               toAddress.val('');
@@ -424,6 +447,7 @@
             default:
               break;
           }
+          modalClose();
         });
 
         $(`.close`).click(function () {
