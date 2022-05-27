@@ -25,6 +25,55 @@ const cryptoFungiABI = [
     type: 'event'
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      }
+    ],
+    name: 'approveToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'name',
+        type: 'string'
+      }
+    ],
+    name: 'createRandomFungus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'fungusId',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'feedId',
+        type: 'uint256'
+      }
+    ],
+    name: 'feed',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -69,6 +118,26 @@ const cryptoFungiABI = [
     type: 'event'
   },
   {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'address_',
+        type: 'address'
+      }
+    ],
+    name: 'setFeedFactoryContractAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -97,6 +166,11 @@ const cryptoFungiABI = [
     inputs: [
       {
         internalType: 'address',
+        name: 'from',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
         name: 'to',
         type: 'address'
       },
@@ -106,7 +180,20 @@ const cryptoFungiABI = [
         type: 'uint256'
       }
     ],
-    name: 'approve',
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address'
+      }
+    ],
+    name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
@@ -128,37 +215,6 @@ const cryptoFungiABI = [
       }
     ],
     stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'name',
-        type: 'string'
-      }
-    ],
-    name: 'createRandomFungus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'fungusId',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'feedId',
-        type: 'uint256'
-      }
-    ],
-    name: 'feed',
-    outputs: [],
-    stateMutability: 'payable',
     type: 'function'
   },
   {
@@ -277,62 +333,6 @@ const cryptoFungiABI = [
       }
     ],
     stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'address_',
-        type: 'address'
-      }
-    ],
-    name: 'setFeedFactoryContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'from',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address'
-      },
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256'
-      }
-    ],
-    name: 'transferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function'
   }
 ];

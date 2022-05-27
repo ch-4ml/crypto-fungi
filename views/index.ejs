@@ -233,7 +233,7 @@
             $('#alert').text('먹이를 찾았습니다!');
           })
           .on('error', function (error) {
-            $('#alert').text(error);
+            $('#alert').text(error.message);
           });
       }
 
@@ -247,7 +247,7 @@
             getFungiByOwner(account).then(displayFungi);
           })
           .on('error', function (error) {
-            $('#alert').text(error);
+            $('#alert').text(error.message);
           });
       }
 
@@ -261,22 +261,21 @@
             getFungiByOwner(account).then(displayFungi);
           })
           .on('error', function (error) {
-            $('#alert').text(error);
+            $('#alert').text(error.message);
           });
       }
 
       function approve(to, fungusId) {
         $('#alert').text('전송 권한을 부여하는 중...');
+        console.log(to, fungusId, account);
         return cryptoFungi.methods
-          .approve(to, fungusId)
-          .send({
-            from: account
-          })
+          .approveToken(to, fungusId)
+          .send({ from: account })
           .on('receipt', function (receipt) {
             $('#alert').text('지정한 주소로 전송 권한을 부여했습니다!');
           })
           .on('error', function (error) {
-            $('#alert').text(error);
+            $('#alert').text(error.message);
           });
       }
 
@@ -292,7 +291,7 @@
             getFungiByOwner(account).then(displayFungi);
           })
           .on('error', function (error) {
-            $('#alert').text(error);
+            $('#alert').text(error.message);
           });
       }
 
@@ -323,7 +322,7 @@
       // 배포된 컨트랙트의 address와 ABI를 사용해서 컨트랙트 객체 생성
       // 생성한 컨트랙트 객체에 접근해서 정의된 함수를 호출할 수 있음
       function startApp() {
-        let cryptoFungiAddress = '0x213d7b38209C29e384643418D1Db3fCCFee99D02';
+        let cryptoFungiAddress = '0xb1a61DD43d1DD827109bb3c8598cA8e9761d40C2';
         cryptoFungi = new web3.eth.Contract(cryptoFungiABI, cryptoFungiAddress);
 
         // 현재 연결된 web3 provider(예제에서는 Metamask)에 있는 계정을 조회하고,

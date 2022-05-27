@@ -28,8 +28,9 @@ contract FungusOwnership is FungusFeeding {
     }
 
     // 토큰 소유자 대신 transfer를 호출할 수 있는 (토큰 전송 승인받은) 운영자 지정
-    function approve(address to, uint256 tokenId) public onlyOwnerOf(tokenId) {
+    function approveToken(address to, uint256 tokenId) public {
         address owner = ownerOf(tokenId);
+
         require(to != owner, "approval to current owner");
         // 토큰의 소유자 또는 운영자만 호출할 수 있음
         require(
@@ -37,7 +38,7 @@ contract FungusOwnership is FungusFeeding {
             "approve caller is not owner nor approved operator"
         );
 
-        _approve(to, tokenId);
+        _approveToken(to, tokenId);
     }
 
     // 토큰 전송
@@ -48,7 +49,7 @@ contract FungusOwnership is FungusFeeding {
         require(to != address(0), "transfer to the zero address");
         
         // 전송한 토큰의 소유자가 변경되었기 때문에 approve를 초기화
-        _approve(address(0), tokenId);
+        _approveToken(address(0), tokenId);
         
         // 토큰의 보유량과 소유권 변경
         ownerFungusCount[from]--;
@@ -59,7 +60,7 @@ contract FungusOwnership is FungusFeeding {
         emit Transfer(from, to, tokenId);
     }
 
-    function _approve(address to, uint tokenId) private {
+    function _approveToken(address to, uint tokenId) private {
         operatorApproval[tokenId] = to;
         emit Approval(ownerOf(tokenId), to, tokenId);
     }
