@@ -322,7 +322,7 @@
       // 배포된 컨트랙트의 address와 ABI를 사용해서 컨트랙트 객체 생성
       // 생성한 컨트랙트 객체에 접근해서 정의된 함수를 호출할 수 있음
       function startApp() {
-        let cryptoFungiAddress = '0xb1a61DD43d1DD827109bb3c8598cA8e9761d40C2';
+        let cryptoFungiAddress = '0xf8dB1Ef5907D1A154A625563015B984b8CB43edB';
         cryptoFungi = new web3.eth.Contract(cryptoFungiABI, cryptoFungiAddress);
 
         // 현재 연결된 web3 provider(예제에서는 Metamask)에 있는 계정을 조회하고,
@@ -432,6 +432,7 @@
               fromAddress = $(`#${currentModalId} #txtFromAddress`);
               toAddress = $(`#${currentModalId} #txtToAddress`);
               if (!fromAddress.val()) {
+                s;
                 $(`#${currentModalId} .alert`).text('Fungus를 보내는 주소를 입력하세요.');
                 return;
               }
